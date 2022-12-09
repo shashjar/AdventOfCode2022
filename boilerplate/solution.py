@@ -6,7 +6,7 @@ def loadInput():
 
 def main():
     lines = loadInput()
-    for line in lines:
+    for i, line in enumerate(lines):
         print(line)
 
 
