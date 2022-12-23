@@ -23,15 +23,11 @@ def empty(elf, elves, dir):
     return True
 
 
-def updateProposedDestinations(elves, proposedMoves):
+def updateProposedDestinations(elves, proposedMoves, destinationCount):
     for elf in elves:
         dest = proposedMoves[elf]
-        for otherElf in elves:
-            if otherElf != elf:
-                otherDest = proposedMoves[otherElf]
-                if otherDest == dest:
-                    proposedMoves[elf] = elf
-                    proposedMoves[otherElf] = otherElf
+        if destinationCount[dest] > 1:
+            proposedMoves[elf] = elf
 
 
 def simulateRound(elves, directions):
@@ -47,7 +43,12 @@ def simulateRound(elves, directions):
                 proposedMoves[elf] = (elf[0] + dir[0][0], elf[1] + dir[0][1])
                 break
 
-    updateProposedDestinations(elves, proposedMoves)
+    allDestinations = proposedMoves.values()
+    destinationCount = {}
+    for dest in allDestinations:
+        destinationCount[dest] = 1 + destinationCount.get(dest, 0)
+
+    updateProposedDestinations(elves, proposedMoves, destinationCount)
 
     newElves = set()
     for elf in elves:
